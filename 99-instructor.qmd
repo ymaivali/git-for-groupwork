@@ -168,18 +168,24 @@ xattr -w com.dropbox.ignored 1 _site
 xattr -w com.dropbox.ignored 1 .quarto
 ```
 
-Applied here, this took the conflicted-copy count from 18 to zero across three
-consecutive renders. It did **not** eliminate the problem entirely — one
-further render still failed with
+Applied to the old Dropbox copy, this took the conflicted-copy count from 18
+to zero across three consecutive renders. It did **not** eliminate the problem
+entirely — one further render still failed with
 
 ``` text
 ERROR: NotFound: No such file or directory (os error 2): rename ...
 ```
 
-which succeeded on a plain retry. So treat it as a mitigation that makes the
+which succeeded on a plain retry. So treat it as a mitigation that makes a
 folder usable, not a cure. It protects the output directory only; it does
 nothing for a `.git` directory. **Do not rely on it to make a git repository
 safe inside Dropbox.**
+
+In the end this tutorial and its example project were both moved out to
+`~/projects/`, which is what Part 2 tells students to do. Three renders in the
+new location: no errors, no conflicted copies. If you are going to ask students
+to keep projects out of synced folders, the course materials should not be
+sitting in one.
 
 ## Maintaining this tutorial
 
