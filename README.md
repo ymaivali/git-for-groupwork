@@ -3,10 +3,18 @@
 A tutorial for students organising group projects around git and GitHub, from
 R and RStudio, with Claude Code doing the git commands.
 
+**Read it here: <https://ymaivali.github.io/git-for-groupwork/>**
+
 Built as a Quarto website. To read it locally:
 
 ```bash
 quarto preview
+```
+
+To republish after editing:
+
+```bash
+quarto publish gh-pages
 ```
 
 ## Design principle
