@@ -119,13 +119,59 @@ Why each one matters:
   lines of hints. `false` means "merge", which is the honest, safe option —
   it never rewrites history you have already shared.
 
-## 5. Check it worked
+## 5. Install the course plugin
+
+Two commands, typed in Claude Code:
+
+```
+/plugin marketplace add ymaivali/claude-plugins
+```
+
+```
+/plugin install git-workflow@ulo-plugins
+```
+
+Then **start a new session.** Skills load when a session starts, so they will
+not appear in the session you installed them in. That surprises everybody once.
+
+This gives you two skills. You do not call them by name — you say what you
+want and the right one loads:
+
+| Say something like | What happens |
+|---|---|
+| *"set up git for this project"* | New repository: the `.gitignore` conversation, your commit identity, first commit, a GitHub repo, first push |
+| *"commit this"*, *"push it"*, *"am I behind?"*, *"open a PR"*, *"I have a conflict"* | The everyday loop |
+
+::: {.callout-important}
+## It also installs a guard, and you should know what that means
+
+The plugin adds a hook that sees **every shell command Claude runs** in your
+sessions, and blocks a short list of git commands that destroy work git cannot
+recover: `--force` pushes, remote branch deletion, `reset --hard`, `clean -f`.
+
+It receives the text of the command and nothing else — no file contents, no
+environment variables, no credentials — and it sends nothing anywhere. It is
+about 90 lines of Python you can read, and it ships with a 53-case test suite
+so you can check that rather than take my word for it:
+
+```bash
+python3 ~/.claude/plugins/*/plugins/git-workflow/hooks/git-guard-test.py
+```
+
+It restrains Claude, not you: you can always run the command yourself in your
+own terminal. Full detail, including how to install the skills without the
+guard, is in
+[the plugin's README](https://github.com/ymaivali/claude-plugins/blob/main/plugins/git-workflow/README.md).
+:::
+
+## 6. Check it worked
 
 ```bash
 git --version
 gh auth status
 git config --global --list | grep -E "user|branch|rebase"
 R --version
+python3 --version
 ```
 
 You want: a git version, `✓ Logged in to github.com account <you>`, your four
