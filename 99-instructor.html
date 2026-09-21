@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.554">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Git for group work - Instructor notes</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./99-instructor.html">Instructor notes</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Git for group work</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Git for group work</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./00-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Part 0 — One-time setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-concepts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Part 1 — The four ideas</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-solo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Part 2 — One person, one project, on GitHub</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-collaborate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Part 3 — Working as a group</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03b-pr-conflict.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Part 3½ — When the pull request conflicts</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-troubleshooting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Part 4 — When it breaks</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05-rules.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Part 5 — Group rules of the road</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./99-instructor.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Instructor notes</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#timing" id="toc-timing" class="nav-link active" data-scroll-target="#timing">Timing</a></li>
+  <li><a href="#check-before-the-session" id="toc-check-before-the-session" class="nav-link" data-scroll-target="#check-before-the-session">Check before the session</a></li>
+  <li><a href="#running-the-conflict-exercise" id="toc-running-the-conflict-exercise" class="nav-link" data-scroll-target="#running-the-conflict-exercise">Running the conflict exercise</a></li>
+  <li><a href="#running-the-part-3½-exercise" id="toc-running-the-part-3½-exercise" class="nav-link" data-scroll-target="#running-the-part-3½-exercise">Running the Part 3½ exercise</a></li>
+  <li><a href="#why-the-example-project-is-shaped-this-way" id="toc-why-the-example-project-is-shaped-this-way" class="nav-link" data-scroll-target="#why-the-example-project-is-shaped-this-way">Why the example project is shaped this way</a></li>
+  <li><a href="#the-example-repo-uses-merge-commits-on-purpose" id="toc-the-example-repo-uses-merge-commits-on-purpose" class="nav-link" data-scroll-target="#the-example-repo-uses-merge-commits-on-purpose">The example repo uses merge commits on purpose</a></li>
+  <li><a href="#things-students-reliably-get-wrong" id="toc-things-students-reliably-get-wrong" class="nav-link" data-scroll-target="#things-students-reliably-get-wrong">Things students reliably get wrong</a></li>
+  <li><a href="#on-letting-ai-do-the-git-work" id="toc-on-letting-ai-do-the-git-work" class="nav-link" data-scroll-target="#on-letting-ai-do-the-git-work">On letting AI do the git work</a></li>
+  <li><a href="#assessment-suggestions" id="toc-assessment-suggestions" class="nav-link" data-scroll-target="#assessment-suggestions">Assessment suggestions</a></li>
+  <li><a href="#the-dropbox-warning-is-not-theoretical" id="toc-the-dropbox-warning-is-not-theoretical" class="nav-link" data-scroll-target="#the-dropbox-warning-is-not-theoretical">The Dropbox warning is not theoretical</a></li>
+  <li><a href="#maintaining-this-tutorial" id="toc-maintaining-this-tutorial" class="nav-link" data-scroll-target="#maintaining-this-tutorial">Maintaining this tutorial</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Instructor notes</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Not for students. Keep this page out of the handout you hand out, or delete it from <code>_quarto.yml</code> before publishing.</p>
+<section id="timing" class="level2">
+<h2 class="anchored" data-anchor-id="timing">Timing</h2>
+<table class="table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Part</th>
+<th>Format</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0 · Setup</td>
+<td><strong>homework, before class</strong></td>
+<td>20 min</td>
+</tr>
+<tr class="even">
+<td>1 · Four ideas</td>
+<td>lecture + napkin check</td>
+<td>15 min</td>
+</tr>
+<tr class="odd">
+<td>2 · Solo walkthrough</td>
+<td>live demo, then they do it</td>
+<td>40 min</td>
+</tr>
+<tr class="even">
+<td>3 · Collaboration cycle</td>
+<td>in groups, one PR each</td>
+<td>45 min</td>
+</tr>
+<tr class="odd">
+<td>3 · Conflict, on purpose</td>
+<td><strong>scripted, whole class together</strong></td>
+<td>30 min</td>
+</tr>
+<tr class="even">
+<td>3½ · Conflict on a pull request</td>
+<td>scripted, in pairs</td>
+<td>20 min</td>
+</tr>
+<tr class="odd">
+<td>4–5 · Troubleshooting, rules</td>
+<td>read + discuss</td>
+<td>15 min</td>
+</tr>
+</tbody>
+</table>
+<p>Two sessions of 90 minutes, or one long workshop. Part 0 as homework is not optional — doing installs and OAuth in class will consume the entire session and half the students will still be stuck.</p>
+</section>
+<section id="check-before-the-session" class="level2">
+<h2 class="anchored" data-anchor-id="check-before-the-session">Check before the session</h2>
+<p>Ask every student to paste the output of these four commands into the course forum a few days before:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">--version</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> auth status</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> <span class="at">--list</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-E</span> <span class="st">"user\.|defaultBranch|rebase"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> <span class="at">--version</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The failure you will see most is a missing <code>pull.rebase</code>. It does not break anything until two people diverge — that is, precisely during the group exercise — and then it fails hard with a wall of hints. Catch it early.</p>
+</section>
+<section id="running-the-conflict-exercise" class="level2">
+<h2 class="anchored" data-anchor-id="running-the-conflict-exercise">Running the conflict exercise</h2>
+<p>Do not hope a conflict happens. Script it:</p>
+<ol type="1">
+<li>Pair the students. Both pull <code>main</code>.</li>
+<li>Both open <code>report.qmd</code> and write a paragraph in the <strong>Interpretation</strong> section — the same lines, their own words.</li>
+<li><strong>Student C pushes first.</strong> Fine.</li>
+<li><strong>Student A pushes.</strong> Rejected. <em>Stop here and read the hint together as a class</em> — this is the single most valuable 60 seconds of the session.</li>
+<li>Student A pulls → conflict.</li>
+<li>Resolve <strong>by hand first</strong>, so everyone has seen the markers in a real file.</li>
+<li><em>Then</em> re-run it and resolve with a prompt, so they see the difference.</li>
+</ol>
+<p>The pedagogical payload is step 4, not step 5. The rejected push is the moment they understand that git is protecting the other person.</p>
+</section>
+<section id="running-the-part-3½-exercise" class="level2">
+<h2 class="anchored" data-anchor-id="running-the-part-3½-exercise">Running the Part 3½ exercise</h2>
+<p>Do this <em>after</em> Part 3, because the contrast is the lesson: in Part 3 the push is rejected, here it succeeds and GitHub complains later. Students who only see one of the two conclude the wrong general rule.</p>
+<p>To engineer it reliably, in pairs:</p>
+<ol type="1">
+<li>Both pull <code>main</code>.</li>
+<li><strong>Student A</strong> branches (<code>feature/limitations</code>) and edits the closing lines of the Interpretation section. Does <em>not</em> push yet.</li>
+<li><strong>Student C</strong> edits the <em>same</em> lines and gets them onto <code>main</code> — in class, pushing straight to <code>main</code> is the quickest way; in their real project this happens because C’s PR was merged.</li>
+<li>A pushes the branch — <strong>it succeeds</strong>. Pause here and ask the class whether everything is fine. Most will say yes.</li>
+<li>A opens the PR. <code>gh pr view &lt;n&gt; --json mergeable,mergeStateStatus</code> → <code>CONFLICTING / DIRTY</code>.</li>
+<li>A fixes it with <code>git merge origin/main</code> <em>inside the branch</em>, resolves, renders, pushes. The PR flips to <code>MERGEABLE / CLEAN</code>.</li>
+</ol>
+<p>Two points worth labouring:</p>
+<ul>
+<li><strong>Direction.</strong> Merging their branch into <code>main</code> locally would “work” and would bypass review entirely. Ask them why that is bad before you tell them.</li>
+<li><strong>Asymmetry.</strong> Here <code>HEAD</code> is their unreviewed branch and the other side is merged, accepted work. The Part 3 instinct of “combine both equally” can silently reverse a group decision inside a merge commit, where no reviewer will ever see it.</li>
+</ul>
+<p><code>mergeable: UNKNOWN</code> right after a push is normal — GitHub computes it asynchronously. Tell them in advance or you will field the question five times.</p>
+</section>
+<section id="why-the-example-project-is-shaped-this-way" class="level2">
+<h2 class="anchored" data-anchor-id="why-the-example-project-is-shaped-this-way">Why the example project is shaped this way</h2>
+<p><strong>Owner-per-file plus one shared section.</strong> Their real group work should flow without conflicts; the shared <code>Interpretation</code> section is the designated safe place to learn the skill.</p>
+<p><strong>Simulated data with a known effect (arm effect = −4).</strong> The model recovers −5.23 (95% CI −7.53 to −2.94). The interval covers the truth and the point estimate misses it by 1.2. Almost no real dataset lets students see sampling variation against a known answer, so this is worth a detour even though the course is about git. It also makes the conflict resolution substantive: the two paragraphs disagree about <em>what to emphasise</em>, not about facts.</p>
+<p><strong>The 4 KB CSV is committed on purpose.</strong> “Never commit data” is the usual advice and it is wrong often enough to be harmful — students who follow it literally produce repositories nobody can run. Teach the criterion (small · synthetic or public · needed to run the code) rather than the slogan.</p>
+</section>
+<section id="the-example-repo-uses-merge-commits-on-purpose" class="level2">
+<h2 class="anchored" data-anchor-id="the-example-repo-uses-merge-commits-on-purpose">The example repo uses merge commits on purpose</h2>
+<p>The handout tells students to <strong>Squash and merge</strong>. The example repository itself uses merge commits, and Part 3 now has a collapsed note explaining why: squashing would flatten away the branch topology that the repository exists to demonstrate.</p>
+<p>Do not “fix” this later. If you ever rebuild the example repo, keep merge commits, and keep recommending squash for student projects. The two-sentence version for class: <em>squashing makes history readable, which is what you want; it also makes branching invisible, which is what we need to look at today.</em></p>
+<p>The graph is worth putting on a slide as-is. Read bottom to top it contains a clean PR, a shared-branch conflict, a stale PR, and a conflict resolved inside a branch — all four situations students will meet, in one picture.</p>
+</section>
+<section id="things-students-reliably-get-wrong" class="level2">
+<h2 class="anchored" data-anchor-id="things-students-reliably-get-wrong">Things students reliably get wrong</h2>
+<table class="table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mistake</th>
+<th>Why it happens</th>
+<th>Pre-empt it by</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Not pulling before working</td>
+<td>Nothing visibly breaks until it does</td>
+<td>Making “look at the Git pane arrows” a ritual</td>
+</tr>
+<tr class="even">
+<td>Forgetting local <code>main</code> after a merge</td>
+<td>GitHub shows merged; their laptop doesn’t move</td>
+<td>Showing <code>git branch -vv</code> before and after</td>
+</tr>
+<tr class="odd">
+<td>Committing <code>.RData</code> / rendered HTML</td>
+<td>RStudio creates them silently</td>
+<td><code>.gitignore</code> before the first commit</td>
+</tr>
+<tr class="even">
+<td>Project inside Dropbox/OneDrive</td>
+<td>It is where their coursework already lives</td>
+<td>Saying it out loud in Part 2, with the reason</td>
+</tr>
+<tr class="odd">
+<td><code>--force</code> after a rejected push</td>
+<td>It is the top Stack Overflow answer</td>
+<td>Naming it explicitly as forbidden, and why</td>
+</tr>
+<tr class="even">
+<td>Merging their own PR</td>
+<td>It is one click</td>
+<td>Grading it</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="on-letting-ai-do-the-git-work" class="level2">
+<h2 class="anchored" data-anchor-id="on-letting-ai-do-the-git-work">On letting AI do the git work</h2>
+<p>The design assumption is that students delegate mechanics and own meaning. It holds up as long as they have the model from Part 1. Without it, an AI-driven student will resolve a conflict by accepting whichever version the model liked, and never notice that a teammate’s paragraph vanished.</p>
+<p>So the napkin check is the real gate, not the walkthrough. If a student cannot draw the four places, more practice with prompts will not help them.</p>
+</section>
+<section id="assessment-suggestions" class="level2">
+<h2 class="anchored" data-anchor-id="assessment-suggestions">Assessment suggestions</h2>
+<p>Grade the repository, not just the report:</p>
+<ul>
+<li><strong>Process (visible in the history)</strong> — commits small and frequent; messages explain why; every contribution merged via a PR someone else approved; <code>main</code> renders from a fresh clone.</li>
+<li><strong>Hygiene</strong> — no data over ~1 MB, no secrets, <code>.gitignore</code> present from the first commit.</li>
+<li><strong>Contribution</strong> — <code>git shortlog -sn</code> shows who committed what. Useful for detecting the group where one person did everything; do not use it mechanically, since pair programming and reviewing are real work that shows up as few commits.</li>
+</ul>
+<p>A good single exam question: <em>“Your teammate pushed work you don’t have, and your push was rejected. Explain what happened and what you will do — and what would happen if you used <code>--force</code>.”</em></p>
+</section>
+<section id="the-dropbox-warning-is-not-theoretical" class="level2">
+<h2 class="anchored" data-anchor-id="the-dropbox-warning-is-not-theoretical">The Dropbox warning is not theoretical</h2>
+<p>While these pages were being written — inside a Dropbox folder — Dropbox created <strong>18 “conflicted copy” files</strong> in the render output and replaced <code>_site/index.html</code> with a 253-byte redirect stub. The site silently served a broken page with every stylesheet and script 404ing.</p>
+<p>Nothing was lost, because the corruption hit only the disposable <code>_site/</code> output and not the <code>.qmd</code> sources. But it is a clean demonstration of the point Part 2 makes to students: a sync client and a build tool both writing to the same directory will eventually collide.</p>
+<p>Two fixes, in order of preference:</p>
+<ol type="1">
+<li><strong>Keep projects out of synced folders.</strong> <code>~/projects</code>, not Dropbox.</li>
+<li>If a project must live in Dropbox, mark the build output as Dropbox-ignored <em>before</em> rendering:</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> _site .quarto</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">xattr</span> <span class="at">-w</span> com.dropbox.ignored 1 _site</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">xattr</span> <span class="at">-w</span> com.dropbox.ignored 1 .quarto</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Applied to the old Dropbox copy, this took the conflicted-copy count from 18 to zero across three consecutive renders. It did <strong>not</strong> eliminate the problem entirely — one further render still failed with</p>
+<pre class="text"><code>ERROR: NotFound: No such file or directory (os error 2): rename ...</code></pre>
+<p>which succeeded on a plain retry. So treat it as a mitigation that makes a folder usable, not a cure. It protects the output directory only; it does nothing for a <code>.git</code> directory. <strong>Do not rely on it to make a git repository safe inside Dropbox.</strong></p>
+<p>In the end this tutorial and its example project were both moved out to <code>~/projects/</code>, which is what Part 2 tells students to do. Three renders in the new location: no errors, no conflicted copies. If you are going to ask students to keep projects out of synced folders, the course materials should not be sitting in one.</p>
+</section>
+<section id="maintaining-this-tutorial" class="level2">
+<h2 class="anchored" data-anchor-id="maintaining-this-tutorial">Maintaining this tutorial</h2>
+<p>Every command and output in these pages was executed on macOS with git 2.39.3, gh 2.90.0, R 4.6.0 and Quarto 1.4.554. The Windows and Linux install instructions were <strong>not</strong> tested — verify them once on a student machine before first use.</p>
+<p>Re-render after editing:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/ymaivali\.github\.io\/git-for-groupwork\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
