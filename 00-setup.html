@@ -206,7 +206,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#make-a-github-account" id="toc-make-a-github-account" class="nav-link" data-scroll-target="#make-a-github-account">2. Make a GitHub account</a></li>
   <li><a href="#log-in-from-your-computer" id="toc-log-in-from-your-computer" class="nav-link" data-scroll-target="#log-in-from-your-computer">3. Log in from your computer</a></li>
   <li><a href="#tell-git-who-you-are-and-how-to-behave" id="toc-tell-git-who-you-are-and-how-to-behave" class="nav-link" data-scroll-target="#tell-git-who-you-are-and-how-to-behave">4. Tell git who you are, and how to behave</a></li>
-  <li><a href="#check-it-worked" id="toc-check-it-worked" class="nav-link" data-scroll-target="#check-it-worked">5. Check it worked</a></li>
+  <li><a href="#install-the-course-plugin" id="toc-install-the-course-plugin" class="nav-link" data-scroll-target="#install-the-course-plugin">5. Install the course plugin</a></li>
+  <li><a href="#check-it-worked" id="toc-check-it-worked" class="nav-link" data-scroll-target="#check-it-worked">6. Check it worked</a></li>
   </ul>
 </nav>
     </div>
@@ -380,12 +381,59 @@ Git’s built-in default is still <code>master</code> on some versions; GitHub e
 </dd>
 </dl>
 </section>
+<section id="install-the-course-plugin" class="level2">
+<h2 class="anchored" data-anchor-id="install-the-course-plugin">5. Install the course plugin</h2>
+<p>Two commands, typed in Claude Code:</p>
+<pre><code>/plugin marketplace add ymaivali/claude-plugins</code></pre>
+<pre><code>/plugin install git-workflow@ulo-plugins</code></pre>
+<p>Then <strong>start a new session.</strong> Skills load when a session starts, so they will not appear in the session you installed them in. That surprises everybody once.</p>
+<p>This gives you two skills. You do not call them by name — you say what you want and the right one loads:</p>
+<table class="table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Say something like</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>“set up git for this project”</em></td>
+<td>New repository: the <code>.gitignore</code> conversation, your commit identity, first commit, a GitHub repo, first push</td>
+</tr>
+<tr class="even">
+<td><em>“commit this”</em>, <em>“push it”</em>, <em>“am I behind?”</em>, <em>“open a PR”</em>, <em>“I have a conflict”</em></td>
+<td>The everyday loop</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+It also installs a guard, and you should know what that means
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The plugin adds a hook that sees <strong>every shell command Claude runs</strong> in your sessions, and blocks a short list of git commands that destroy work git cannot recover: <code>--force</code> pushes, remote branch deletion, <code>reset --hard</code>, <code>clean -f</code>.</p>
+<p>It receives the text of the command and nothing else — no file contents, no environment variables, no credentials — and it sends nothing anywhere. It is about 90 lines of Python you can read, and it ships with a 53-case test suite so you can check that rather than take my word for it:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> ~/.claude/plugins/<span class="pp">*</span>/plugins/git-workflow/hooks/git-guard-test.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>It restrains Claude, not you: you can always run the command yourself in your own terminal. Full detail, including how to install the skills without the guard, is in <a href="https://github.com/ymaivali/claude-plugins/blob/main/plugins/git-workflow/README.md">the plugin’s README</a>.</p>
+</div>
+</div>
+</section>
 <section id="check-it-worked" class="level2">
-<h2 class="anchored" data-anchor-id="check-it-worked">5. Check it worked</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">--version</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> auth status</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> <span class="at">--list</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-E</span> <span class="st">"user|branch|rebase"</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> <span class="at">--version</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2 class="anchored" data-anchor-id="check-it-worked">6. Check it worked</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">--version</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> auth status</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> <span class="at">--list</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-E</span> <span class="st">"user|branch|rebase"</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> <span class="at">--version</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">--version</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You want: a git version, <code>✓ Logged in to github.com account &lt;you&gt;</code>, your four config lines, and an R version. If <code>gh auth status</code> says your token is invalid, run <code>gh auth login</code> again.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">

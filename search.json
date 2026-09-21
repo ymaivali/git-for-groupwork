@@ -630,11 +630,21 @@
     ]
   },
   {
+    "objectID": "00-setup.html#install-the-course-plugin",
+    "href": "00-setup.html#install-the-course-plugin",
+    "title": "Part 0 — One-time setup",
+    "section": "5. Install the course plugin",
+    "text": "5. Install the course plugin\nTwo commands, typed in Claude Code:\n/plugin marketplace add ymaivali/claude-plugins\n/plugin install git-workflow@ulo-plugins\nThen start a new session. Skills load when a session starts, so they will not appear in the session you installed them in. That surprises everybody once.\nThis gives you two skills. You do not call them by name — you say what you want and the right one loads:\n\n\n\n\n\n\n\nSay something like\nWhat happens\n\n\n\n\n“set up git for this project”\nNew repository: the .gitignore conversation, your commit identity, first commit, a GitHub repo, first push\n\n\n“commit this”, “push it”, “am I behind?”, “open a PR”, “I have a conflict”\nThe everyday loop\n\n\n\n\n\n\n\n\n\nIt also installs a guard, and you should know what that means\n\n\n\nThe plugin adds a hook that sees every shell command Claude runs in your sessions, and blocks a short list of git commands that destroy work git cannot recover: --force pushes, remote branch deletion, reset --hard, clean -f.\nIt receives the text of the command and nothing else — no file contents, no environment variables, no credentials — and it sends nothing anywhere. It is about 90 lines of Python you can read, and it ships with a 53-case test suite so you can check that rather than take my word for it:\npython3 ~/.claude/plugins/*/plugins/git-workflow/hooks/git-guard-test.py\nIt restrains Claude, not you: you can always run the command yourself in your own terminal. Full detail, including how to install the skills without the guard, is in the plugin’s README.",
+    "crumbs": [
+      "Part 0 — One-time setup"
+    ]
+  },
+  {
     "objectID": "00-setup.html#check-it-worked",
     "href": "00-setup.html#check-it-worked",
     "title": "Part 0 — One-time setup",
-    "section": "5. Check it worked",
-    "text": "5. Check it worked\ngit --version\ngh auth status\ngit config --global --list | grep -E \"user|branch|rebase\"\nR --version\nYou want: a git version, ✓ Logged in to github.com account &lt;you&gt;, your four config lines, and an R version. If gh auth status says your token is invalid, run gh auth login again.\n\n\n\n\n\n\nStuck?\n\n\n\nPaste the entire error message into Claude Code and say “this happened while setting up git, what do I do?”. Pasting the whole message including the hints matters — the hints usually contain the answer.",
+    "section": "6. Check it worked",
+    "text": "6. Check it worked\ngit --version\ngh auth status\ngit config --global --list | grep -E \"user|branch|rebase\"\nR --version\npython3 --version\nYou want: a git version, ✓ Logged in to github.com account &lt;you&gt;, your four config lines, and an R version. If gh auth status says your token is invalid, run gh auth login again.\n\n\n\n\n\n\nStuck?\n\n\n\nPaste the entire error message into Claude Code and say “this happened while setting up git, what do I do?”. Pasting the whole message including the hints matters — the hints usually contain the answer.",
     "crumbs": [
       "Part 0 — One-time setup"
     ]
