@@ -119,6 +119,57 @@ exactly one commit on `main` per contribution, which makes `main`'s history
 readable and makes undoing a bad contribution a single step.
 :::
 
+::: {.callout-note collapse="true"}
+## Why the example repository does not follow its own advice
+
+If you look at the history of
+[the example repository](https://github.com/ymaivali/penguin-clinic/commits/main),
+you will find merge commits, not squashes. That is deliberate.
+
+Squashing hides the branching. For *your* project that is exactly what you
+want — a clean line of contributions on `main`. But for a repository whose job
+is to *teach* branching, throwing the branches away would throw away the
+lesson. Merge commits keep the shape visible:
+
+``` text
+*   76e5a30 Merge pull request #2
+|\
+| *   e9868fb Merge main into feature/limitations
+| |\
+|/|
+* | 76c6037 Strengthen the synthetic-data disclaimer
+| * b41c5d3 Note that the simulation guarantees correct specification
+|/
+*   929bf6e Merge student C's interpretation
+|\
+| * de43b31 Write the Interpretation section
+* | b10d837 Add interpretation with estimate and CI
+|/
+*   32afb9c Merge pull request #1
+|\
+| * 26826f2 Add sex-stratified descriptives
+|/
+* 752e171 Set up project skeleton
+```
+
+Read from the bottom, that is every situation in this tutorial: a clean pull
+request (#1), a conflict between two people sharing `main` (`929bf6e`), a
+pull request that went stale because `main` moved on (`76c6037` vs `b41c5d3`),
+and that conflict resolved inside the branch (`e9868fb`) before it was merged
+(#2).
+
+Try it yourself:
+
+```bash
+git clone https://github.com/ymaivali/penguin-clinic.git
+cd penguin-clinic
+git log --oneline --graph
+```
+
+So: **squash in your own project, and read the example's graph to understand
+what squashing would have hidden.**
+:::
+
 ### The step everyone forgets
 
 **Merging on GitHub does not change anything on your laptop.** Your local

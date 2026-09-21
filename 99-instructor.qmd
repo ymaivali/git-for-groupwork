@@ -105,6 +105,22 @@ advice and it is wrong often enough to be harmful — students who follow it
 literally produce repositories nobody can run. Teach the criterion (small ·
 synthetic or public · needed to run the code) rather than the slogan.
 
+## The example repo uses merge commits on purpose
+
+The handout tells students to **Squash and merge**. The example repository
+itself uses merge commits, and Part 3 now has a collapsed note explaining why:
+squashing would flatten away the branch topology that the repository exists to
+demonstrate.
+
+Do not "fix" this later. If you ever rebuild the example repo, keep merge
+commits, and keep recommending squash for student projects. The two-sentence
+version for class: *squashing makes history readable, which is what you want;
+it also makes branching invisible, which is what we need to look at today.*
+
+The graph is worth putting on a slide as-is. Read bottom to top it contains a
+clean PR, a shared-branch conflict, a stale PR, and a conflict resolved inside
+a branch — all four situations students will meet, in one picture.
+
 ## Things students reliably get wrong
 
 | Mistake | Why it happens | Pre-empt it by |
