@@ -1,0 +1,191 @@
+---
+title: "Part 4 — When it breaks"
+---
+
+## The universal first move
+
+::: {.callout-tip}
+## Say this to Claude Code
+> Something's wrong with git. Here's the whole error: [paste everything].
+> What's the state of my repository and what should I do?
+:::
+
+Paste the **entire** message, hints included. Git's hints usually contain the
+answer, and students habitually paste only the first red line.
+
+Before anything else, two harmless commands that tell you where you are:
+
+```bash
+git status
+git log --oneline --graph -10
+```
+
+Nothing in this world is lost as long as you committed it. Git's default
+behaviour is to refuse to destroy work; almost every alarming message is git
+*protecting* you.
+
+## The five errors you will actually meet
+
+All five outputs below are real, captured from the worked example.
+
+### 1. Rejected push
+
+``` text
+ ! [rejected]        main -> main (fetch first)
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally.
+```
+
+**What it means** — a teammate pushed; you would be overwriting them.
+
+**Fix** — `git pull`, resolve anything that conflicts, then `git push`.
+
+**Never** — `git push --force`. That deletes your teammate's commits from
+GitHub.
+
+### 2. Need to specify how to reconcile
+
+``` text
+fatal: Need to specify how to reconcile divergent branches.
+```
+
+**What it means** — you and GitHub both have new commits, and git has not been
+told whether to merge or rebase. Not your fault: a missing setting.
+
+**Fix** — the Part 0 line you skipped:
+
+```bash
+git config --global pull.rebase false
+git pull
+```
+
+### 3. Merge conflict
+
+``` text
+CONFLICT (content): Merge conflict in report.qmd
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+**What it means** — the same lines changed on both sides. Working as designed.
+
+**Fix** — see [Part 3](03-collaborate.qmd). Or escape with `git merge --abort`, which puts
+everything back untouched.
+
+### 3b. Your pull request says CONFLICTING
+
+``` text
+mergeable        : CONFLICTING
+mergeStateStatus : DIRTY
+```
+
+**What it means** — your branch was fine when you made it, but `main` moved on
+underneath you and touched the same lines. Your push was never rejected, so
+this is the first you hear of it.
+
+**Fix** — bring `main` into your branch, not the other way round:
+
+```bash
+git fetch origin
+git merge origin/main
+# resolve, check it renders, then:
+git push
+```
+
+The PR updates itself. Full walkthrough in [Part 3½](03b-pr-conflict.qmd).
+
+**Watch out** — in this conflict the other side is work your group has already
+reviewed and merged. Default to keeping it and adding yours.
+
+### 4. Author identity unknown
+
+``` text
+*** Please tell me who you are.
+Run
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+fatal: empty ident name (for <>) not allowed
+```
+
+**What it means** — git will not stamp a commit with nobody's name.
+
+**Fix** — run the two lines it gives you. Use the email your GitHub account
+uses, or GitHub will not link the commits to you.
+
+### 5. You committed something huge or secret
+
+Not one error message but several — a push that hangs for minutes, or GitHub
+refusing a file over 100 MB.
+
+**Fix** — if you have **not pushed yet**, this is easy:
+
+::: {.callout-tip}
+## Say this to Claude Code
+> I accidentally committed `data/huge_export.csv` in my last commit and haven't
+> pushed. Undo that commit, keep my other changes, and add the file to
+> .gitignore.
+:::
+
+**If you have already pushed a secret**, the situation is different and you
+should tell your instructor. Rewriting shared history is disruptive, and — the
+important part — **assume the secret is already compromised.** Revoke the API
+key, change the password. Removing it from the repository does not un-publish
+it.
+
+## Prompt cheat-sheet
+
+Say these instead of learning commands.
+
+### Every day
+
+| What you want | Say |
+|---|---|
+| Start work | *"Pull the latest changes and tell me what my teammates changed."* |
+| Save progress | *"Commit my work with a message explaining why I made this change."* |
+| Publish it | *"Push this to GitHub."* |
+| Start a task | *"Make a branch for adding the age-adjusted model."* |
+| Submit it | *"Push this branch and open a pull request explaining what and why."* |
+| After it's merged | *"My PR was merged — update my main and delete the old branch."* |
+
+### Finding out what is going on
+
+| What you want | Say |
+|---|---|
+| Where am I? | *"What branch am I on, and is anything uncommitted?"* |
+| What changed? | *"Show me what I've changed since my last commit."* |
+| Who did this? | *"Who last changed the model in R/03-model.R, and what was the message?"* |
+| Recent history | *"Summarise what the group has done in the last week."* |
+| Am I behind? | *"Am I behind GitHub? What would I get if I pulled?"* |
+
+### Fixing things
+
+| What you want | Say |
+|---|---|
+| Undo uncommitted mess | *"Throw away my uncommitted changes to R/02-describe.R."* |
+| Undo last commit, keep work | *"Undo my last commit but keep the changes in my files."* |
+| Undo a merged contribution | *"Revert the commit that added the sex-stratified table."* |
+| Go back and look | *"Show me report.qmd as it was three commits ago."* |
+| Wrong branch | *"I did this work on main by mistake. Move it to a new branch."* |
+
+::: {.callout-warning}
+## Two prompts to be careful with
+
+*"Throw away my changes"* and *"undo my last commit"* can destroy work that
+was never committed, which is the one kind git cannot recover.
+
+Before agreeing to anything that discards work, ask: **"what exactly will be
+lost?"** A good answer names files. If you are unsure, commit first — a commit
+you do not want is easy to discard later; uncommitted work you deleted is gone.
+:::
+
+## What not to delegate
+
+| Delegate freely | Decide yourself |
+|---|---|
+| Writing commit messages | Whether your code is correct |
+| `add`/`commit`/`push`/`pull`/branches | Which version of a conflict is right |
+| Writing `.gitignore` | Whether a data file may be published at all |
+| Opening pull requests | Whether a teammate's PR should be merged |
+| Explaining an error | Whether to force-push (answer: no) |
+
+The pattern: **anything reversible and mechanical, delegate. Anything about
+meaning or about publishing, own.**

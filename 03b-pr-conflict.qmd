@@ -1,0 +1,232 @@
+---
+title: "Part 3½ — When the pull request conflicts"
+---
+
+[Part 3](03-collaborate.qmd) showed a conflict between two people sharing
+`main`. This one is the version you will actually meet if your group follows
+the pull-request discipline, and it looks different enough to be worth its own
+walkthrough.
+
+Everything below is real output from
+[PR #2 of the example repository](https://github.com/ymaivali/penguin-clinic/pull/2).
+
+## How you get here
+
+Nobody did anything wrong. That is the point.
+
+1. You branch off `main` and start writing.
+2. While you are working, a teammate's pull request is merged. **`main` has
+   moved on.**
+3. Their change touched the same lines yours did.
+
+Your branch is now based on a version of the project that no longer exists.
+
+## Your push still works — and that is the trap
+
+```bash
+git push -u origin feature/limitations
+```
+
+``` text
+ * [new branch]      feature/limitations -> feature/limitations
+branch 'feature/limitations' set up to track 'origin/feature/limitations'
+```
+
+No rejection, no warning. **Branches never conflict on push**, because nobody
+else is pushing to your branch. This is the opposite of Part 3, where the push
+itself was rejected.
+
+So you open the pull request happily:
+
+```bash
+gh pr create --base main --title "Note that the simulation guarantees correct specification"
+```
+
+``` text
+https://github.com/ymaivali/penguin-clinic/pull/2
+```
+
+And *then* GitHub tells you.
+
+## Finding out: ask, do not guess
+
+On the PR page, the green merge button is replaced by a warning that the
+branch has conflicts which must be resolved. From the terminal:
+
+```bash
+gh pr view 2 --json mergeable,mergeStateStatus
+```
+
+``` text
+PR #2  feature/limitations -> main
+  mergeable        : CONFLICTING
+  mergeStateStatus : DIRTY
+```
+
+::: {.callout-note}
+## `UNKNOWN` just means "ask again in a moment"
+
+GitHub works out mergeability in the background. Immediately after a push you
+will often get:
+
+``` text
+mergeable: UNKNOWN   state: UNKNOWN
+```
+
+That is not a problem. Wait a few seconds and ask again.
+:::
+
+::: {.callout-tip}
+## Say this to Claude Code
+> My pull request says it has conflicts. What conflicts, and what do I need to
+> decide?
+:::
+
+## The fix: bring `main` into your branch
+
+The direction matters, and it is the one thing to get right on this page.
+
+```bash
+git fetch origin
+git merge origin/main       # main comes INTO your branch
+```
+
+``` text
+Auto-merging report.qmd
+CONFLICT (content): Merge conflict in report.qmd
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+::: {.callout-important}
+## Why this direction and not the other
+
+You could in principle merge your branch into `main` locally and push that.
+**Do not.** It would put your unfinished, unreviewed work onto `main` directly,
+bypassing the pull request and the teammate who was supposed to read it.
+
+Resolve inside your own branch. `main` stays untouched until somebody merges
+your PR. Your branch is your problem; `main` is the group's.
+:::
+
+## Reading this conflict: the sides are not equal
+
+```{mermaid}
+flowchart LR
+    M1["main<br/>when you branched"] --> M2["main<br/>now"]
+    M1 --> B1["your branch"]
+    M2 -->|"git merge origin/main"| R["resolve<br/>here"]
+    B1 --> R
+    R -->|"git push"| PR["PR becomes<br/>MERGEABLE"]
+```
+
+The real conflict from PR #2:
+
+``` text
+<<<<<<< HEAD
+This is a demonstration of the estimator on synthetic data. It is not
+evidence about any real intervention.
+
+A further limitation: the simulation assumes the arm effect is constant
+across ages, so the model is correctly specified by construction. Real
+data would not be so obliging.
+=======
+These data are synthetic. Nothing above is evidence about any real
+intervention, and the numbers should not be quoted outside this course.
+>>>>>>> origin/main
+```
+
+Now notice something that was not true in Part 3:
+
+- `HEAD` is **your branch** — work nobody has reviewed yet
+- below `=======` is **`main`** — work the group has *already accepted*
+
+::: {.callout-important}
+## Default to keeping `main`'s decision, and adding yours
+
+In Part 3 both sides were equally provisional, so combining them was a
+free choice. Here they are not. Somebody wrote that disclaimer, somebody else
+reviewed it, and it was merged. Overwriting it with your own phrasing quietly
+reverses a decision your group already made — and because it arrives inside a
+conflict resolution, nobody will see it in review.
+
+So the resolution kept `main`'s wording and *added* the separate point:
+
+``` markdown
+These data are synthetic. Nothing above is evidence about any real
+intervention, and the numbers should not be quoted outside this course.
+
+A further limitation: the simulation assumes the arm effect is constant
+across ages, so the model is correctly specified by construction. Real
+data would not be so obliging.
+```
+
+If you genuinely think `main` is wrong, that is a conversation in the pull
+request, not a silent edit inside a merge.
+:::
+
+## The two checks, again
+
+```bash
+grep -nE '^(<<<<<<<|=======|>>>>>>>)' report.qmd || echo "clean"
+quarto render report.qmd
+```
+
+``` text
+clean
+Output created: report.html
+```
+
+## Commit and push — to your branch
+
+```bash
+git add report.qmd
+git commit -m "Merge main into feature/limitations"
+git push
+```
+
+Plain `git push`, because you are still on your branch and it is already
+tracking `origin`. You are **not** pushing to `main`.
+
+Ask GitHub again:
+
+```bash
+gh pr view 2 --json mergeable,mergeStateStatus
+```
+
+``` text
+mergeable: MERGEABLE   state: CLEAN
+```
+
+The pull request updated itself. Your teammate can now review it and press
+**Squash and merge**.
+
+## The web "Resolve conflicts" button
+
+GitHub offers to resolve simple conflicts in the browser. It works, and for a
+one-line README clash it is fine.
+
+::: {.callout-warning}
+## But it cannot run your code
+
+Resolving in the browser means you commit a file you have never rendered or
+sourced. That is exactly how `<<<<<<< HEAD` reaches a submitted report, and
+how a half-merged R script gets onto `main`.
+
+For anything that has to execute — `.R`, `.qmd`, `.Rmd` — resolve locally and
+render before you push.
+:::
+
+## Part 3 vs Part 3½, side by side
+
+| | Part 3: shared `main` | Part 3½: pull request |
+|---|---|---|
+| Who collided | two people on `main` | your branch vs merged work |
+| First symptom | **push rejected** | push succeeds; **PR says CONFLICTING** |
+| Where you find out | terminal, immediately | GitHub, after you open the PR |
+| Command that surfaces it | `git pull` | `git merge origin/main` |
+| Sides in the conflict | two drafts, equal standing | your draft vs **accepted** work |
+| Default resolution | combine both | keep `main`, add yours |
+| What you push afterwards | `main` | your branch |
+
+Same mechanism underneath: two changes to the same lines, and a human decides.
+Only the moment of discovery differs.

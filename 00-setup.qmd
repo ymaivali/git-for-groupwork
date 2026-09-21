@@ -1,0 +1,140 @@
+---
+title: "Part 0 — One-time setup"
+---
+
+Do this **once per computer**, before the session. Budget 20 minutes, and do
+it while you have decent internet.
+
+::: {.callout-warning}
+## This part cannot be delegated to AI
+
+Creating your account and logging in are the only steps in this tutorial that
+involve your personal credentials. Claude cannot do them for you, and you
+should be suspicious of any tool that offers to. Everything *after* this point
+is negotiable.
+:::
+
+## 1. Install the four tools
+
+::: {.panel-tabset}
+### macOS
+
+```bash
+xcode-select --install       # installs git (and much else); skip if already done
+brew install gh              # GitHub CLI
+```
+
+R and RStudio: download from [posit.co/download/rstudio-desktop](https://posit.co/download/rstudio-desktop/)
+(install R first, then RStudio).
+
+No Homebrew? Get `gh` from [cli.github.com](https://cli.github.com).
+
+### Windows
+
+1. **Git** — [git-scm.com/download/win](https://git-scm.com/download/win). Accept the
+   defaults. This also installs *Git Bash*, a terminal where these commands work.
+2. **GitHub CLI** — [cli.github.com](https://cli.github.com).
+3. **R then RStudio** — [posit.co/download/rstudio-desktop](https://posit.co/download/rstudio-desktop/).
+
+::: {.callout-note}
+Run the commands in this tutorial in **Git Bash** or in RStudio's *Terminal*
+tab, not in PowerShell, unless you know what you are doing.
+:::
+
+### Linux (Debian/Ubuntu)
+
+```bash
+sudo apt update && sudo apt install git gh r-base
+```
+
+RStudio from [posit.co/download/rstudio-desktop](https://posit.co/download/rstudio-desktop/).
+:::
+
+## 2. Make a GitHub account
+
+[github.com/signup](https://github.com/signup). Use an email you will still
+have after you graduate. Turn on two-factor authentication when it asks —
+GitHub requires it and you will be forced to eventually anyway.
+
+::: {.callout-tip}
+## Pick a username you would put on a CV
+Your GitHub profile is public and outlives the course. `ulo-maivali` ages
+better than `xX_stats_destroyer_Xx`.
+:::
+
+## 3. Log in from your computer
+
+```bash
+gh auth login -h github.com
+```
+
+Four prompts. Answer them like this:
+
+| Prompt | Answer | Why |
+|---|---|---|
+| Preferred protocol | **HTTPS** | Simpler than SSH keys; nothing to generate or lose |
+| Authenticate Git with your GitHub credentials? | **Yes** | This is what makes `git push` work without ever typing a password. Do not skip it. |
+| How would you like to authenticate? | **Login with a web browser** | Creates a token with only the permissions you need |
+| One-time code | press Return, paste the code in the browser, authorise | |
+
+::: {.callout-warning}
+## Do not paste a Personal Access Token unless you have to
+The browser login mints a narrow, revocable token. A hand-made "classic" token
+often ends up with far more power than this course needs (organisation admin,
+for instance), and it sits on your laptop for years.
+:::
+
+## 4. Tell git who you are, and how to behave
+
+Four lines. Run them once; they apply to every project on this computer.
+
+```bash
+git config --global user.name "Your Actual Name"
+git config --global user.email "the-email-you-used-for-github@example.com"
+git config --global init.defaultBranch main
+git config --global pull.rebase false
+```
+
+Windows only, to stop line-ending noise in a mixed-OS group:
+
+```bash
+git config --global core.autocrlf true
+```
+
+Why each one matters:
+
+`user.name` / `user.email`
+: Stamped into every commit you make, forever. On macOS git will silently fall
+  back to your system account name if you skip this, so your commits may end
+  up authored by "Admin". Set it.
+
+`init.defaultBranch main`
+: Git's built-in default is still `master` on some versions; GitHub expects
+  `main`. Mismatched names cause confusing push errors.
+
+`pull.rebase false`
+: **The most commonly skipped line, and it causes a hard failure.** Without it,
+  the first time your work and your teammate's work diverge, `git pull` aborts
+  with `fatal: Need to specify how to reconcile divergent branches.` and eight
+  lines of hints. `false` means "merge", which is the honest, safe option —
+  it never rewrites history you have already shared.
+
+## 5. Check it worked
+
+```bash
+git --version
+gh auth status
+git config --global --list | grep -E "user|branch|rebase"
+R --version
+```
+
+You want: a git version, `✓ Logged in to github.com account <you>`, your four
+config lines, and an R version. If `gh auth status` says your token is invalid,
+run `gh auth login` again.
+
+::: {.callout-tip}
+## Stuck?
+Paste the entire error message into Claude Code and say *"this happened while
+setting up git, what do I do?"*. Pasting the **whole** message including the
+hints matters — the hints usually contain the answer.
+:::

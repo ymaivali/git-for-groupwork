@@ -1,0 +1,138 @@
+---
+title: "Part 1 — The four ideas"
+---
+
+
+No computers for this part. Ten minutes, and then you are allowed to let the
+AI do the typing for the rest of your life.
+
+## Idea 1: four places, three moves
+
+Your work exists in four places. Git's commands are just moves between them.
+
+```{mermaid}
+flowchart LR
+    A["<b>Working directory</b><br/>the files you edit<br/>in RStudio"]
+    B["<b>Staging area</b><br/>what will go into<br/>the next snapshot"]
+    C["<b>Local repository</b><br/>your history<br/>on your laptop"]
+    D[("<b>GitHub</b><br/>the shared history<br/>everyone sees")]
+
+    A -->|"git add"| B
+    B -->|"git commit"| C
+    C -->|"git push"| D
+    D -->|"git pull"| A
+```
+
+Three things to notice, because each one causes a specific student disaster:
+
+1. **`commit` is local.** Committing does *not* put your work on GitHub. You
+   can commit all week on a plane and nobody sees a thing.
+2. **`push` is the only move that publishes.** Until you push, your teammates
+   cannot see your work — and if your laptop dies, it is gone.
+3. **`pull` is the only move that brings other people's work to you.** If you
+   have not pulled today, you are working on yesterday's version of the project.
+
+::: {.callout-note}
+## Why is there a staging area at all?
+So you can commit *some* of your changes and not others. You fixed a typo and
+half-rewrote the model; you can commit the typo fix on its own. Most of the
+time Claude will stage everything relevant and you will never think about it.
+:::
+
+## Idea 2: a commit is a labelled snapshot
+
+A commit is the whole project at one moment, plus:
+
+- who made it
+- when
+- **a message saying why**
+
+The history is a chain of these snapshots. This is the entire reason git can
+undo things: every previous state still exists.
+
+The message is for a human — probably you, in five weeks, wondering why the
+model changed. `"update"`, `"fixes"` and `"asdf"` are worthless. Good messages
+say *why*, because the *what* is already visible in the diff:
+
+::: {.callout-tip}
+## Good
+> Drop 3 participants with impossible ages — the export had -1 for missing
+:::
+
+::: {.callout-caution}
+## Useless
+> fixed data
+:::
+
+This is genuinely something Claude does better than most humans, so let it.
+
+## Idea 3: a branch is a parallel line of work
+
+A branch lets you build something half-finished without breaking the version
+everyone else is using.
+
+```{mermaid}
+%%{init: {'gitGraph': {'rotateCommitLabel': false, 'showBranches': true}}}%%
+gitGraph
+    commit id: "setup"
+    branch sex-table
+    commit id: "your work"
+    checkout main
+    merge sex-table id: "PR #1"
+    commit id: "next"
+```
+
+`main` is the branch that must always work. You do your work on a branch named
+after what you are doing, then you **merge** it back into `main`.
+
+A **Pull Request** (PR) is a merge with a conversation attached: it happens on
+GitHub, your teammates can see exactly what changed, comment on it, and press
+Merge. In this course the rule is: **you do not merge your own pull request.**
+A teammate does. That single rule is the whole of code review.
+
+## Idea 4: a conflict means git refuses to guess
+
+If you change lines 40–43 of `report.qmd` and your teammate changes the same
+lines, git cannot know which version is right. So it stops, puts both versions
+in the file surrounded by markers, and tells you to decide:
+
+``` text
+<<<<<<< HEAD
+Treatment was associated with a lower score than control (adjusted
+difference -5.23, 95% CI -7.53 to -2.94).
+=======
+In this simulated dataset the treatment arm scored about 5 points lower
+than control after adjustment for age and sex.
+>>>>>>> de43b31
+```
+
+Read it as: *above `=======` is mine, below is theirs.*
+
+::: {.callout-important}
+## A conflict is not an error, and it is not the AI's decision
+
+This is git protecting you. The alternative — a tool that silently picks one
+version — would lose your work without telling you.
+
+And notice what the example above actually is: two people who each said
+something true that the other left out. The right answer is usually **both**,
+rewritten. Claude can delete the markers for you in a second; only your group
+knows what the paragraph is supposed to claim.
+:::
+
+## The napkin check
+
+Before you touch a computer, on paper, without looking:
+
+1. Draw the four places and label the three moves between them.
+2. You committed your work this morning but your teammate cannot see it. Which
+   move did you forget?
+3. Your teammate says "it works on my machine" and you cannot reproduce it.
+   Which move did *you* forget?
+4. In your own words: what is a merge conflict, and who resolves it?
+
+::: {.callout-tip collapse="true"}
+## Answers
+2. `push`. 3. `pull`. 4. Two people changed the same lines; git refuses to
+choose; the humans who wrote them decide, then commit the decision.
+:::

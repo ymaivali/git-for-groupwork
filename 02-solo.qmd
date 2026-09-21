@@ -1,0 +1,225 @@
+---
+title: "Part 2 — One person, one project, on GitHub"
+---
+
+One member of the group does this once, while the others watch. Then everyone
+does it again alone, with a throwaway project, because you only learn it by
+doing it.
+
+Every command on this page has been run for real; the outputs shown are the
+actual outputs.
+
+## 1. Make an RStudio Project
+
+In RStudio: **File → New Project → New Directory → New Project**.
+
+- Directory name: `penguin-clinic`
+- Create as a subdirectory of: somewhere sensible, e.g. `~/projects`
+- Leave "Create a git repository" **unchecked** — we will do it deliberately
+
+::: {.callout-warning}
+## Do not put your project in Dropbox, OneDrive or iCloud
+
+A sync client and git both want to manage the same files, and the sync client
+can corrupt git's internal bookkeeping by writing into `.git` at the wrong
+moment. More importantly: **GitHub is now your sharing mechanism.** Putting a
+git project in a sync folder is doing the same job twice, badly.
+
+Use `~/projects/` or `Documents/projects/` — anywhere that is not synced.
+:::
+
+Why a Project and not just a folder? Because `.Rproj` fixes your working
+directory. Every path in your code becomes relative to the project root, so
+`read.csv("data/clinic_visits.csv")` works on your teammate's laptop too. This
+is a precondition for collaboration, not a nicety.
+
+## 2. Open the project folder in Claude Code
+
+Open Claude Code and point it at the project folder you just made. It needs to
+be *in* the project, otherwise it will put files in the wrong place.
+
+## 3. Build the project skeleton
+
+::: {.callout-tip}
+## Say this to Claude Code
+> Set up this R project for group work: an `R/` folder with three analysis
+> scripts, a `data-raw/` script that simulates a small dataset, a `data/`
+> folder, and a `report.qmd` that sources the scripts. Also write a README
+> saying who owns which file.
+:::
+
+The structure we are aiming at:
+
+``` text
+penguin-clinic/
+├── penguin-clinic.Rproj
+├── README.md
+├── .gitignore
+├── data-raw/00-simulate-data.R   # makes the data, so provenance is in the repo
+├── data/clinic_visits.csv        # 4 KB, simulated
+├── R/01-clean.R                  # student A owns
+├── R/02-describe.R               # student B owns
+├── R/03-model.R                  # student C owns
+└── report.qmd                    # shared; conflicts live here
+```
+
+**Check it works before going near git.** A broken project in version control
+is still broken.
+
+```bash
+Rscript -e 'source("R/01-clean.R"); print(nrow(load_visits()))'
+```
+
+## 4. Start the repository and write a `.gitignore`
+
+::: {.callout-tip}
+## Say this to Claude Code
+> Make this a git repository with `main` as the default branch, and write a
+> `.gitignore` suitable for an R and Quarto project. Keep the small simulated
+> CSV in version control but exclude RStudio session state, rendered output
+> and anything that looks like a secret.
+:::
+
+```bash
+git init -b main
+```
+
+The `.gitignore` is the one file worth understanding, because the mistakes it
+prevents are the expensive ones:
+
+``` text
+# RStudio session junk — machine-specific, never useful to anyone else
+.Rproj.user/
+.Rhistory
+.RData
+
+# secrets: NEVER commit these
+.Renviron
+.env
+
+# rendered output — commit the source, not the result
+report.html
+report_files/
+/_site/
+/.quarto/
+
+# OS noise
+.DS_Store
+```
+
+::: {.callout-important}
+## "Never commit data" is wrong advice
+
+You will hear it anyway. The real criterion is:
+
+| Commit it | Do not commit it |
+|---|---|
+| Small (< ~1 MB) | Large — git stores every version forever |
+| Simulated or public | Personal, identifiable, or under a data agreement |
+| Needed to run the code | Re-derivable from something else in the repo |
+
+Our 4 KB simulated CSV is committed on purpose: without it, nobody can run
+your code. A real patient export would be excluded, and the README would say
+where to get it.
+
+And the hard part: **git never forgets.** If you commit a file with patient
+data or an API key and then delete it, it is still in the history and still
+on GitHub. Removing it properly is difficult and you must assume the secret is
+burned. So get `.gitignore` right *before* the first commit.
+:::
+
+## 5. First commit
+
+::: {.callout-tip}
+## Say this to Claude Code
+> Show me what would be committed, then commit it with a message explaining
+> what this project is.
+:::
+
+```bash
+git status --short          # ?? means untracked
+git add -A
+git status --short          # A  means staged
+git commit -m "Set up project skeleton for the group analysis"
+```
+
+Confirm the `.gitignore` actually worked:
+
+```bash
+git status --ignored --short | grep '^!!'
+```
+
+Real output from this project:
+
+``` text
+!! report.html
+!! report_files/
+```
+
+That is `.gitignore` doing its job. If you see `!! data/patient_export.csv`,
+good. If you see it staged with `A `, stop and fix it.
+
+## 6. Create the GitHub repository and push
+
+::: {.callout-tip}
+## Say this to Claude Code
+> Create a public GitHub repository called penguin-clinic from this folder and
+> push main to it.
+:::
+
+```bash
+gh repo create penguin-clinic --public --source=. --remote=origin --push
+```
+
+Real output:
+
+``` text
+https://github.com/ymaivali/penguin-clinic
+To https://github.com/ymaivali/penguin-clinic.git
+ * [new branch]      HEAD -> main
+branch 'main' set up to track 'origin/main'.
+```
+
+That one command did three things worth naming:
+
+1. created the repository on GitHub
+2. added it to your local repo under the name **`origin`** — that word just
+   means "the GitHub copy"
+3. pushed `main` and set it to *track* `origin/main`, so from now on plain
+   `git push` and `git pull` know where to go
+
+Open the URL. Your files are there. Check that the ignored ones are **not**.
+
+## 7. The loop you will now repeat forever
+
+Change something in RStudio → commit → push → refresh the browser.
+
+::: {.callout-tip}
+## Say this to Claude Code
+> Commit and push this change, with a message explaining why I did it.
+:::
+
+Watch RStudio's **Git pane** (top right, appears after you reopen the project)
+while you do it. It is the window through which you see the four places from
+[Part 1](01-concepts.qmd):
+
+- files appear with `?` when untracked, `M` when modified
+- checkboxes are the **staging area**
+- *Commit* moves them into your **local history**
+- the **↑ / ↓ arrows** show how many commits you are ahead of / behind GitHub
+
+::: {.callout-note}
+## Look at the arrows every time you sit down
+
+`↓ 2` means your teammates have pushed twice and you do not have their work
+yet. **Pull before you start.** That one habit prevents most conflicts.
+:::
+
+## 8. Add your teammates
+
+On GitHub: **Settings → Collaborators → Add people**. They need to accept the
+invitation by email before they can push.
+
+```bash
+gh repo view --web    # opens the repo in your browser
+```

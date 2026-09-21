@@ -1,0 +1,90 @@
+---
+title: "Part 5 — Group rules of the road"
+---
+
+Put these in your project's README and hold each other to them.
+
+## The seven rules
+
+**1. Pull before you start. Push when you stop.**
+: The single habit that prevents most pain. Check RStudio's Git pane arrows
+  every time you sit down.
+
+**2. `main` must always run.**
+: Anyone should be able to pull `main` and render the report. If you break it,
+  fixing it is your only priority. Nobody can work on a broken base.
+
+**3. Work on a branch; a teammate merges your pull request.**
+: Never merge your own. The five minutes a teammate spends reading your diff
+  is the cheapest quality control available.
+
+**4. Own your files.**
+: Put the ownership table in the README. Conflicts need two people in the same
+  lines — so mostly, do not be there.
+
+**5. Commit small, commit often, say why.**
+: One idea per commit. The message explains *why*, because the diff already
+  shows *what*.
+
+**6. Never commit anything you would not email to a stranger.**
+: No patient data, no passwords, no API keys, no `.Renviron`. Git never
+  forgets: deleting a file later does not remove it from the history, and a
+  pushed secret must be treated as burned. Get `.gitignore` right first.
+
+**7. Never `git push --force` on a shared branch.**
+: It deletes your teammates' commits. If you think you need it, ask.
+
+## Commit message shape
+
+```
+Short line saying what changed (under ~60 characters)
+
+Then a blank line, then why — the reasoning, the alternative you rejected,
+the thing that will not be obvious in six weeks.
+```
+
+Real example from this project:
+
+> **Set up project skeleton for the git tutorial**
+>
+> The `.gitignore` excludes RStudio session state, rendered output and secrets,
+> but deliberately keeps the 4 KB synthetic CSV so students see that "never
+> commit data" is a judgement, not a rule.
+
+## A README that makes the group work
+
+```markdown
+# Project title
+
+One sentence on what this analyses.
+
+## Who owns what
+| File | Owner |
+|------|-------|
+| R/01-clean.R | A |
+| R/02-describe.R | B |
+| R/03-model.R | C |
+| report.qmd, Interpretation | everyone |
+
+## How to run it
+Open the .Rproj in RStudio, then: quarto render report.qmd
+
+## Where the data come from
+Simulated by data-raw/00-simulate-data.R. No real people.
+```
+
+The ownership table is not bureaucracy. It is your conflict-avoidance
+mechanism written down.
+
+## What good looks like at the end of term
+
+- 30–80 small commits, not 4 giant ones
+- messages a stranger could follow
+- every contribution went through a pull request someone else merged
+- `main` renders on any group member's laptop
+- no data file over a megabyte, no secrets, ever
+- and when your report says a number, you can point at the commit that
+  produced it
+
+That last one is worth more than the version control. A project whose history
+you can walk is a project whose results you can defend.

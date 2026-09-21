@@ -1,0 +1,358 @@
+---
+title: "Part 3 — Working as a group"
+---
+
+This is the part that actually matters. Everything before it was single-player.
+
+## 1. Everyone else joins: clone
+
+Each other group member does this once.
+
+::: {.callout-tip}
+## Say this to Claude Code
+> Clone github.com/OUR-GROUP/penguin-clinic into my projects folder.
+:::
+
+```bash
+cd ~/projects
+git clone https://github.com/ymaivali/penguin-clinic.git
+```
+
+Then open `penguin-clinic.Rproj` in RStudio. You have a complete copy: every
+file, and the entire history. A clone already knows where it came from, so
+`git push` and `git pull` work immediately with no setup.
+
+::: {.callout-note}
+## Clone once, pull forever
+Cloning again because "it stopped working" is the student equivalent of
+reinstalling Windows. You almost never need to.
+:::
+
+## 2. The contribution cycle
+
+This is the loop for every piece of work, all term. Five steps.
+
+```{mermaid}
+flowchart TD
+    P["<b>1. pull</b><br/>get everyone's latest work"] --> B["<b>2. branch</b><br/>start your own line of work"]
+    B --> C["<b>3. commit</b><br/>as often as you like, locally"]
+    C --> PR["<b>4. push + open a Pull Request</b><br/>ask your group to take your work"]
+    PR --> M["<b>5. a teammate merges,<br/>then everyone pulls</b>"]
+    M --> P
+```
+
+### Step 1 & 2 — pull, then branch
+
+```bash
+git switch main
+git pull
+git switch -c feature/describe-by-sex
+```
+
+Branch names: `feature/what-it-does`. Not `ulo`, not `new`, not `test2`.
+Someone reading the pull request list in three weeks should know what each one
+was for.
+
+### Step 3 — work, and commit as you go
+
+::: {.callout-tip}
+## Say this to Claude Code
+> Commit what I've done so far with a message about adding the sex-stratified
+> summary table.
+:::
+
+Commit *often* and *small*. Every commit is a point you can return to. A
+single commit called "did the whole analysis" is a point you can return to
+only if you want to lose the whole analysis.
+
+**Check your code runs before you commit.** In this project:
+
+```bash
+Rscript -e 'source("R/01-clean.R"); source("R/02-describe.R"); print(describe_by_sex(load_visits()))'
+```
+
+Real output:
+
+``` text
+        arm sex  n mean_score sd_score
+1   control   F 26      60.32     6.06
+2 treatment   F 25      56.08     6.02
+3   control   M 34      60.77     6.33
+4 treatment   M 35      54.76     7.67
+```
+
+### Step 4 — push the branch and open a Pull Request
+
+::: {.callout-tip}
+## Say this to Claude Code
+> Push this branch and open a pull request explaining what I changed, why, and
+> how a reviewer can check it.
+:::
+
+```bash
+git push -u origin feature/describe-by-sex
+gh pr create --base main --title "Add sex-stratified descriptives" --body "..."
+```
+
+A pull request worth reviewing answers three questions. Ours did:
+
+> **What** — Adds `describe_by_sex()` in `R/02-describe.R` and shows the table
+> in the Descriptives section.
+>
+> **Why** — The arms were balanced by construction (60/60) but sex was not, so
+> the pooled table could hide a difference between strata.
+>
+> **How to check this** — `describe_by_sex(load_visits())`; expect 4 rows
+> summing to n = 120.
+
+That third heading is the one students skip and reviewers need most.
+
+### Step 5 — a teammate reviews and merges
+
+::: {.callout-important}
+## You do not merge your own pull request
+Someone else in the group opens it on GitHub, reads the diff, and presses
+**Merge pull request → Squash and merge**.
+
+Choose **Squash and merge**, not the default "Create a merge commit": it puts
+exactly one commit on `main` per contribution, which makes `main`'s history
+readable and makes undoing a bad contribution a single step.
+:::
+
+### The step everyone forgets
+
+**Merging on GitHub does not change anything on your laptop.** Your local
+`main` is now behind. Real output from this project immediately after the
+merge:
+
+``` text
+* feature/describe-by-sex 26826f2 [origin/feature/describe-by-sex] Add sex-...
+  main                    752e171 [origin/main] Set up project skeleton
+```
+
+Local `main` still points at the old commit. So after every merge, everyone
+in the group runs:
+
+::: {.callout-tip}
+## Say this to Claude Code
+> My PR was merged. Update my main and clean up the branch.
+:::
+
+```bash
+git switch main
+git pull
+git fetch --prune                        # forget branches deleted on GitHub
+git branch -d feature/describe-by-sex    # delete the local copy
+```
+
+Skip this and you will, a week later, commit new work onto a branch that was
+merged and deleted, and be very confused.
+
+## 3. The merge conflict, on purpose
+
+Now the thing you are actually here for. Do this deliberately, in class, while
+nothing is at stake.
+
+**Setup.** Two group members both edit the **Interpretation** section of
+`report.qmd` — the same lines — without pulling in between.
+
+### What happens: student C pushes first
+
+```bash
+git commit -am "Write the Interpretation section"
+git push
+```
+
+Fine. GitHub now has student C's paragraph.
+
+### Student A, who did not pull, tries to push
+
+```bash
+git commit -am "Add interpretation with effect estimate and CI"
+git push
+```
+
+Real output:
+
+``` text
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to 'https://github.com/...'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+```
+
+::: {.callout-important}
+## Read that hint. It is telling you the truth.
+
+"The remote contains work that you do not have locally" means: **your teammate
+pushed something and you would be overwriting it.** Git is refusing to let you
+destroy their work.
+
+There is a way to force it — `git push --force` — and it does exactly what it
+sounds like: it deletes your teammate's commits from GitHub. Never type it.
+If some website tells you to, that website is not thinking about your group.
+:::
+
+### So student A pulls
+
+```bash
+git pull
+```
+
+Real output:
+
+``` text
+Auto-merging report.qmd
+CONFLICT (content): Merge conflict in report.qmd
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+`git status` tells you precisely what git wants:
+
+``` text
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+	both modified:   report.qmd
+```
+
+::: {.callout-note}
+## `git merge --abort` is your safety net
+It puts everything back exactly as it was before the pull. If you panic, use
+it. Nothing is lost. Then try again when you are calm.
+:::
+
+### Reading the conflict
+
+Open `report.qmd` in RStudio. It contains both versions:
+
+``` text
+<<<<<<< HEAD
+Treatment was associated with a lower score than control (adjusted
+difference -5.23, 95% CI -7.53 to -2.94). We stress that these data are
+simulated, so this is a demonstration of the estimator and not evidence
+about any real intervention.
+=======
+In this simulated dataset the treatment arm scored about 5 points lower
+than control after adjustment for age and sex. Because the data were
+generated with a known arm effect of -4, the estimate is close to the
+truth but not identical - ordinary sampling variation.
+>>>>>>> de43b31
+```
+
+- `<<<<<<< HEAD` up to `=======` — **your** version
+- `=======` down to `>>>>>>>` — **their** version
+- `de43b31` — the ID of their commit
+
+### Resolving it: the actual skill
+
+Look at those two paragraphs. Student A has the numbers. Student C has the
+comparison against the known simulated effect. **Neither is wrong, and each
+says something the other omitted.** So the resolution keeps both:
+
+``` markdown
+Treatment was associated with a lower score than control (adjusted
+difference -5.23 points, 95% CI -7.53 to -2.94). These data were simulated
+with a known arm effect of -4, so the estimate is close to the truth but not
+identical: the interval covers -4, and the gap between -5.23 and -4 is
+ordinary sampling variation rather than bias.
+
+This is a demonstration of the estimator on synthetic data. It is not
+evidence about any real intervention.
+```
+
+::: {.callout-important}
+## This is why you cannot fully delegate this
+
+Ask Claude to resolve a conflict and it will produce something clean and
+plausible. It may quietly pick one version, or blend them into a sentence your
+group never agreed to claim. It does not know which number you decided to
+report, or that you agreed last week to always flag the data as simulated.
+
+**Delegate the mechanics, own the meaning.** A good prompt tells it the
+decision:
+
+> There's a conflict in the Interpretation section. Keep both points: my
+> estimate with its confidence interval, and C's comparison against the known
+> simulated effect of -4. Merge them into one paragraph and keep the sentence
+> saying the data are synthetic.
+:::
+
+### Before you commit the resolution — two checks
+
+1. **All markers gone?**
+
+```bash
+grep -nE '^(<<<<<<<|=======|>>>>>>>)' report.qmd || echo "clean"
+```
+
+2. **Does it still run?** A half-resolved file is valid text and invalid code.
+
+```bash
+quarto render report.qmd
+```
+
+Skipping check 2 is how `<<<<<<< HEAD` ends up in a submitted report.
+
+### Finish the merge
+
+```bash
+git add report.qmd
+git commit -m "Merge student C's interpretation with the effect estimate"
+git push
+```
+
+The history now shows exactly what happened:
+
+``` text
+*   929bf6e Merge student C's interpretation with the effect estimate
+|\
+| * de43b31 Write the Interpretation section        <- student C
+* | b10d837 Add interpretation with estimate and CI <- student A
+|/
+*   32afb9c Merge pull request #1
+```
+
+Both people's work survives, and the record shows who wrote what and how it
+was reconciled. That is the entire value proposition of git in one picture.
+
+### And the other members pull
+
+```bash
+git pull
+```
+
+``` text
+Updating de43b31..929bf6e
+Fast-forward
+ report.qmd | 12 ++++++++----
+```
+
+"Fast-forward" means there was nothing to reconcile — you simply moved
+forward. Most pulls look like this. Conflicts are the exception, not the rule.
+
+## 4. How to almost never have conflicts
+
+Conflicts need **two people editing the same lines between pulls**. Break any
+link in that chain:
+
+1. **Own your files.** The README says who owns what. Stay in your file.
+2. **Pull before you start. Push when you stop.** Shrinks the window.
+3. **Small, frequent pull requests.** A branch alive for two weeks is a
+   conflict with a countdown.
+4. **In shared prose, one paragraph per person, on its own lines.** Conflicts
+   are line-based, so blank lines between contributions genuinely help.
+5. **Say out loud when you are about to touch a shared file.** The cheapest
+   version-control tool is a group chat message.
+
+## Next: the other kind of conflict
+
+The conflict above happened because two people shared `main`. If your group
+follows the pull-request discipline, you will more often meet a conflict that
+shows up **on the pull request** instead — your push succeeds, and GitHub
+tells you afterwards. That is [Part 3½](03b-pr-conflict.qmd), and the correct
+fix points in the opposite direction.

@@ -1,0 +1,65 @@
+---
+title: "Git for group work"
+---
+
+## What this is for
+
+Your group project lives in files: R scripts, a Quarto report, maybe some data.
+Several of you will edit those files over several weeks. You need a way to do
+that without emailing zip files, without `analysis_final_v3_ULO_REALLY_FINAL.R`,
+and without silently overwriting each other's work.
+
+That is what git and GitHub are for. By the end of this tutorial your group
+will have:
+
+- one GitHub repository that everybody can read and write
+- a history of who changed what, when, and **why**
+- a way to work at the same time without destroying each other's work
+- a `main` branch that always runs
+
+## The deal about AI doing the work
+
+You will not memorise git commands. Claude Code will type them for you, and it
+is better at writing commit messages than you are.
+
+But you do have to understand **four ideas**, because when things go wrong —
+and they will — the AI can fix the mechanics while only you can decide what is
+*correct*. When two of you have written different interpretations of the same
+result, no amount of AI can tell you which sentence your group means to publish.
+
+::: {.callout-important}
+## The bar you have to clear
+
+By the end of [Part 1](01-concepts.qmd) you must be able to draw the four-places diagram
+from memory and explain what a merge conflict is. That is the whole theory
+requirement. Everything else you can delegate.
+:::
+
+## What you will build
+
+A small R project called `penguin-clinic`: simulated clinic data, three
+analysis scripts, and a shared Quarto report. It is deliberately structured so
+that each group member owns one file — and so that one section of the report
+is shared, to make you deal with a merge conflict on purpose, in a safe place,
+before it happens for real at 23:00 the night before a deadline.
+
+A worked version of the finished repository, with all its history and its pull
+request, is here:
+[github.com/ymaivali/penguin-clinic](https://github.com/ymaivali/penguin-clinic).
+
+## How to read the code blocks
+
+Most steps are shown twice:
+
+::: {.callout-tip}
+## Say this to Claude Code
+> Commit my changes with a message explaining that I added the sex-stratified table.
+:::
+
+```bash
+# what it actually runs
+git add R/02-describe.R
+git commit -m "Add sex-stratified descriptives"
+```
+
+Read the prompt. Glance at the commands. Do not memorise the commands.

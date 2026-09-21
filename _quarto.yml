@@ -1,0 +1,28 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Git for group work"
+  description: "R, RStudio, Claude Code and GitHub"
+  sidebar:
+    style: docked
+    search: true
+    contents:
+      - index.qmd
+      - 00-setup.qmd
+      - 01-concepts.qmd
+      - 02-solo.qmd
+      - 03-collaborate.qmd
+      - 03b-pr-conflict.qmd
+      - 04-troubleshooting.qmd
+      - 05-rules.qmd
+      - 99-instructor.qmd
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    code-overflow: wrap

@@ -1,0 +1,195 @@
+---
+title: "Instructor notes"
+---
+
+Not for students. Keep this page out of the handout you hand out, or delete it
+from `_quarto.yml` before publishing.
+
+## Timing
+
+| Part | Format | Time |
+|---|---|---|
+| 0 · Setup | **homework, before class** | 20 min |
+| 1 · Four ideas | lecture + napkin check | 15 min |
+| 2 · Solo walkthrough | live demo, then they do it | 40 min |
+| 3 · Collaboration cycle | in groups, one PR each | 45 min |
+| 3 · Conflict, on purpose | **scripted, whole class together** | 30 min |
+| 3½ · Conflict on a pull request | scripted, in pairs | 20 min |
+| 4–5 · Troubleshooting, rules | read + discuss | 15 min |
+
+Two sessions of 90 minutes, or one long workshop. Part 0 as homework is not
+optional — doing installs and OAuth in class will consume the entire session
+and half the students will still be stuck.
+
+## Check before the session
+
+Ask every student to paste the output of these four commands into the course
+forum a few days before:
+
+```bash
+git --version
+gh auth status
+git config --global --list | grep -E "user\.|defaultBranch|rebase"
+R --version
+```
+
+The failure you will see most is a missing `pull.rebase`. It does not break
+anything until two people diverge — that is, precisely during the group
+exercise — and then it fails hard with a wall of hints. Catch it early.
+
+## Running the conflict exercise
+
+Do not hope a conflict happens. Script it:
+
+1. Pair the students. Both pull `main`.
+2. Both open `report.qmd` and write a paragraph in the **Interpretation**
+   section — the same lines, their own words.
+3. **Student C pushes first.** Fine.
+4. **Student A pushes.** Rejected. *Stop here and read the hint together as a
+   class* — this is the single most valuable 60 seconds of the session.
+5. Student A pulls → conflict.
+6. Resolve **by hand first**, so everyone has seen the markers in a real file.
+7. *Then* re-run it and resolve with a prompt, so they see the difference.
+
+The pedagogical payload is step 4, not step 5. The rejected push is the moment
+they understand that git is protecting the other person.
+
+## Running the Part 3½ exercise
+
+Do this *after* Part 3, because the contrast is the lesson: in Part 3 the push
+is rejected, here it succeeds and GitHub complains later. Students who only see
+one of the two conclude the wrong general rule.
+
+To engineer it reliably, in pairs:
+
+1. Both pull `main`.
+2. **Student A** branches (`feature/limitations`) and edits the closing lines of
+   the Interpretation section. Does *not* push yet.
+3. **Student C** edits the *same* lines and gets them onto `main` — in class,
+   pushing straight to `main` is the quickest way; in their real project this
+   happens because C's PR was merged.
+4. A pushes the branch — **it succeeds**. Pause here and ask the class whether
+   everything is fine. Most will say yes.
+5. A opens the PR. `gh pr view <n> --json mergeable,mergeStateStatus` →
+   `CONFLICTING / DIRTY`.
+6. A fixes it with `git merge origin/main` *inside the branch*, resolves,
+   renders, pushes. The PR flips to `MERGEABLE / CLEAN`.
+
+Two points worth labouring:
+
+- **Direction.** Merging their branch into `main` locally would "work" and
+  would bypass review entirely. Ask them why that is bad before you tell them.
+- **Asymmetry.** Here `HEAD` is their unreviewed branch and the other side is
+  merged, accepted work. The Part 3 instinct of "combine both equally" can
+  silently reverse a group decision inside a merge commit, where no reviewer
+  will ever see it.
+
+`mergeable: UNKNOWN` right after a push is normal — GitHub computes it
+asynchronously. Tell them in advance or you will field the question five times.
+
+## Why the example project is shaped this way
+
+**Owner-per-file plus one shared section.** Their real group work should flow
+without conflicts; the shared `Interpretation` section is the designated safe
+place to learn the skill.
+
+**Simulated data with a known effect (arm effect = −4).** The model recovers
+−5.23 (95% CI −7.53 to −2.94). The interval covers the truth and the point
+estimate misses it by 1.2. Almost no real dataset lets students see sampling
+variation against a known answer, so this is worth a detour even though the
+course is about git. It also makes the conflict resolution substantive: the two
+paragraphs disagree about *what to emphasise*, not about facts.
+
+**The 4 KB CSV is committed on purpose.** "Never commit data" is the usual
+advice and it is wrong often enough to be harmful — students who follow it
+literally produce repositories nobody can run. Teach the criterion (small ·
+synthetic or public · needed to run the code) rather than the slogan.
+
+## Things students reliably get wrong
+
+| Mistake | Why it happens | Pre-empt it by |
+|---|---|---|
+| Not pulling before working | Nothing visibly breaks until it does | Making "look at the Git pane arrows" a ritual |
+| Forgetting local `main` after a merge | GitHub shows merged; their laptop doesn't move | Showing `git branch -vv` before and after |
+| Committing `.RData` / rendered HTML | RStudio creates them silently | `.gitignore` before the first commit |
+| Project inside Dropbox/OneDrive | It is where their coursework already lives | Saying it out loud in Part 2, with the reason |
+| `--force` after a rejected push | It is the top Stack Overflow answer | Naming it explicitly as forbidden, and why |
+| Merging their own PR | It is one click | Grading it |
+
+## On letting AI do the git work
+
+The design assumption is that students delegate mechanics and own meaning. It
+holds up as long as they have the model from Part 1. Without it, an AI-driven
+student will resolve a conflict by accepting whichever version the model liked,
+and never notice that a teammate's paragraph vanished.
+
+So the napkin check is the real gate, not the walkthrough. If a student cannot
+draw the four places, more practice with prompts will not help them.
+
+## Assessment suggestions
+
+Grade the repository, not just the report:
+
+- **Process (visible in the history)** — commits small and frequent; messages
+  explain why; every contribution merged via a PR someone else approved;
+  `main` renders from a fresh clone.
+- **Hygiene** — no data over ~1 MB, no secrets, `.gitignore` present from the
+  first commit.
+- **Contribution** — `git shortlog -sn` shows who committed what. Useful for
+  detecting the group where one person did everything; do not use it
+  mechanically, since pair programming and reviewing are real work that shows
+  up as few commits.
+
+A good single exam question: *"Your teammate pushed work you don't have, and
+your push was rejected. Explain what happened and what you will do — and what
+would happen if you used `--force`."*
+
+## The Dropbox warning is not theoretical
+
+While these pages were being written — inside a Dropbox folder — Dropbox
+created **18 "conflicted copy" files** in the render output and replaced
+`_site/index.html` with a 253-byte redirect stub. The site silently served a
+broken page with every stylesheet and script 404ing.
+
+Nothing was lost, because the corruption hit only the disposable `_site/`
+output and not the `.qmd` sources. But it is a clean demonstration of the point
+Part 2 makes to students: a sync client and a build tool both writing to the
+same directory will eventually collide.
+
+Two fixes, in order of preference:
+
+1. **Keep projects out of synced folders.** `~/projects`, not Dropbox.
+2. If a project must live in Dropbox, mark the build output as Dropbox-ignored
+   *before* rendering:
+
+```bash
+mkdir -p _site .quarto
+xattr -w com.dropbox.ignored 1 _site
+xattr -w com.dropbox.ignored 1 .quarto
+```
+
+Applied here, this took the conflicted-copy count from 18 to zero across three
+consecutive renders. It did **not** eliminate the problem entirely — one
+further render still failed with
+
+``` text
+ERROR: NotFound: No such file or directory (os error 2): rename ...
+```
+
+which succeeded on a plain retry. So treat it as a mitigation that makes the
+folder usable, not a cure. It protects the output directory only; it does
+nothing for a `.git` directory. **Do not rely on it to make a git repository
+safe inside Dropbox.**
+
+## Maintaining this tutorial
+
+Every command and output in these pages was executed on macOS with git 2.39.3,
+gh 2.90.0, R 4.6.0 and Quarto 1.4.554. The Windows and Linux install
+instructions were **not** tested — verify them once on a student machine before
+first use.
+
+Re-render after editing:
+
+```bash
+quarto render
+```
